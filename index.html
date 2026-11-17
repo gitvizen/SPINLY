@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#08090c" />
+  <title>Spinly – Gruppen-Loser</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient-glow" aria-hidden="true"></div>
+
+  <main class="app">
+    <!-- Top Utility Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="brand-row">
+          <h1>SPINLY</h1>
+          <span class="version-badge">v2.0</span>
+        </div>
+        <div class="status-line">
+          <span id="statusDot" class="status-dot"></span>
+          <span id="statusText" class="mono-label">READY // 4 OPTIONS</span>
+        </div>
+      </div>
+
+      <button id="soundToggle" class="sfx-btn" type="button" aria-label="Ton umschalten">
+        <svg id="soundIconOn" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+        </svg>
+        <svg id="soundIconOff" class="hidden" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+          <line x1="23" y1="9" x2="17" y2="15"></line>
+          <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+        <span id="soundLabel">SFX ON</span>
+      </button>
+    </header>
+
+    <!-- Precision Wheel Module -->
+    <section class="panel wheel-panel">
+      <div class="panel-top">
+        <span class="mono-label">RANDOMIZER ENGINE</span>
+        <span id="oddsLabel" class="mono-label accent-text">25.0% / SLOT</span>
+      </div>
+
+      <div class="wheel-wrapper">
+        <div class="pointer" aria-hidden="true"></div>
+        <canvas id="wheelCanvas" width="316" height="316"></canvas>
+        <button id="spinBtn" class="spin-center-btn" type="button">SPIN</button>
+      </div>
+
+      <p id="hintText" class="hint">Tap wheel or press SPIN to execute</p>
+    </section>
+
+    <!-- Result Readout Card -->
+    <section id="winnerCard" class="panel winner-card hidden" aria-live="polite">
+      <div class="panel-top">
+        <span class="mono-label accent-text">OUTPUT // SELECTED</span>
+        <span id="winnerTime" class="mono-label">--:--</span>
+      </div>
+      <h2 id="winnerName" class="winner-name">—</h2>
+      <div class="winner-actions">
+        <button id="spinAgainBtn" class="btn btn-primary" type="button">SPIN AGAIN</button>
+        <button id="removeWinnerBtn" class="btn btn-secondary" type="button">REMOVE</button>
+      </div>
+    </section>
+
+    <!-- Options & Presets Panel -->
+    <section class="panel">
+      <div class="panel-top">
+        <span class="mono-label">POOL CONFIGURATION</span>
+        <span id="countBadge" class="mono-label">04 ITEMS</span>
+      </div>
+
+      <form id="addForm" class="add-form">
+        <input
+          id="optionInput"
+          type="text"
+          maxlength="24"
+          placeholder="Add name or option..."
+          autocomplete="off"
+          required
+        />
+        <button type="submit" class="btn btn-primary btn-add" aria-label="Hinzufügen">+</button>
+      </form>
+
+      <div class="presets">
+        <button type="button" class="chip" data-preset="bill">WER ZAHLT</button>
+        <button type="button" class="chip" data-preset="food">ESSEN</button>
+        <button type="button" class="chip" data-preset="yesno">JA / NEIN</button>
+        <button type="button" id="clearAllBtn" class="chip chip-danger">CLEAR</button>
+      </div>
+
+      <ul id="optionList" class="option-list"></ul>
+    </section>
+
+    <!-- Recent Log Panel -->
+    <section id="historySection" class="panel hidden">
+      <div class="panel-top">
+        <span class="mono-label">RECENT LOG</span>
+        <button id="clearHistoryBtn" class="text-btn" type="button">PURGE</button>
+      </div>
+      <ul id="historyList" class="history-list"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
