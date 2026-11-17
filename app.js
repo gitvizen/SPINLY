@@ -1,4 +1,4 @@
-const STORAGE_KEY = 'spinly_state_v2';
+const STORAGE_KEY = 'spinly_state_v3';
 
 // High-contrast stealth-tech segment palette
 const COLORS = [
@@ -12,14 +12,8 @@ const COLORS = [
   '#38bdf8'  // Sky Blue
 ];
 
-const PRESETS = {
-  bill: ['Alex', 'Sam', 'Chris', 'Jules'],
-  food: ['Pizza', 'Burger', 'Sushi', 'Döner', 'Pasta'],
-  yesno: ['Ja', 'Nein']
-};
-
 const defaultState = {
-  options: ['Alex', 'Sam', 'Chris', 'Jules'],
+  options: [],
   history: [],
   sound: true
 };
@@ -120,7 +114,7 @@ function drawWheel() {
 
   ctx.clearRect(0, 0, size, size);
 
-  // Outer calibrated bezel ring (TinyBoost hardware dial look)
+  // Outer calibrated bezel ring
   ctx.beginPath();
   ctx.arc(center, center, outerBezel, 0, Math.PI * 2);
   ctx.fillStyle = '#0b0d12';
@@ -156,7 +150,7 @@ function drawWheel() {
     ctx.fillStyle = '#7c8496';
     ctx.font = '600 12px "JetBrains Mono", monospace';
     ctx.textAlign = 'center';
-    ctx.fillText('MIN. 2 OPTIONS REQUIRED', center, center - 48);
+    ctx.fillText('POOL EMPTY', center, center - 54);
     return;
   }
 
@@ -179,7 +173,7 @@ function drawWheel() {
     ctx.strokeStyle = '#08090c';
     ctx.stroke();
 
-    // Inner subtle edge highlight
+    // Label
     ctx.save();
     ctx.translate(center, center);
     ctx.rotate(startAngle + sliceAngle / 2);
@@ -217,6 +211,7 @@ function spin() {
   isSpinning = true;
   spinBtn.disabled = true;
   winnerCard.classList.add('hidden');
+  statusDot.classList.remove('standby');
   statusDot.classList.add('spinning');
   statusText.textContent = 'EXECUTING // SPINNING';
   hintText.textContent = 'Calculating random vector...';
@@ -282,53 +277,62 @@ function finishSpin() {
 function renderOptions() {
   optionList.innerHTML = '';
   const count = state.options.length;
+  const canSpin = count >= 2;
 
   countBadge.textContent = `${String(count).padStart(2, '0')} ITEMS`;
   oddsLabel.textContent = count > 0 ? `${(100 / count).toFixed(1)}% / SLOT` : '0.0% / SLOT';
+  clearAllBtn.classList.toggle('hidden', count === 0);
 
   if (!isSpinning) {
-    statusText.textContent = count >= 2
+    statusDot.classList.toggle('standby', !canSpin);
+    statusText.textContent = canSpin
       ? `READY // ${count} OPTIONS`
       : 'STANDBY // ADD OPTIONS';
   }
 
-  state.options.forEach((opt, index) => {
-    const li = document.createElement('li');
-    li.className = 'option-item';
+  if (count === 0) {
+    const empty = document.createElement('li');
+    empty.className = 'empty-state';
+    empty.textContent = 'NO OPTIONS IN POOL — ADD ITEMS ABOVE';
+    optionList.appendChild(empty);
+  } else {
+    state.options.forEach((opt, index) => {
+      const li = document.createElement('li');
+      li.className = 'option-item';
 
-    const left = document.createElement('div');
-    left.className = 'option-left';
+      const left = document.createElement('div');
+      left.className = 'option-left';
 
-    const bar = document.createElement('span');
-    bar.className = 'color-bar';
-    bar.style.background = COLORS[index % COLORS.length];
+      const bar = document.createElement('span');
+      bar.className = 'color-bar';
+      bar.style.background = COLORS[index % COLORS.length];
 
-    const idx = document.createElement('span');
-    idx.className = 'option-index';
-    idx.textContent = String(index + 1).padStart(2, '0');
+      const idx = document.createElement('span');
+      idx.className = 'option-index';
+      idx.textContent = String(index + 1).padStart(2, '0');
 
-    const span = document.createElement('span');
-    span.textContent = opt;
+      const span = document.createElement('span');
+      span.textContent = opt;
 
-    left.append(bar, idx, span);
+      left.append(bar, idx, span);
 
-    const delBtn = document.createElement('button');
-    delBtn.className = 'delete-btn';
-    delBtn.type = 'button';
-    delBtn.textContent = '×';
-    delBtn.setAttribute('aria-label', `${opt} entfernen`);
-    delBtn.addEventListener('click', () => {
-      if (isSpinning) return;
-      state.options.splice(index, 1);
-      saveState();
-      updateUI();
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-btn';
+      delBtn.type = 'button';
+      delBtn.textContent = '×';
+      delBtn.setAttribute('aria-label', `${opt} entfernen`);
+      delBtn.addEventListener('click', () => {
+        if (isSpinning) return;
+        state.options.splice(index, 1);
+        saveState();
+        updateUI();
+      });
+
+      li.append(left, delBtn);
+      optionList.appendChild(li);
     });
+  }
 
-    li.append(left, delBtn);
-    optionList.appendChild(li);
-  });
-
-  const canSpin = count >= 2;
   spinBtn.disabled = !canSpin || isSpinning;
   hintText.textContent = canSpin
     ? 'Tap wheel or press SPIN to execute'
@@ -405,17 +409,6 @@ soundToggle.addEventListener('click', () => {
   state.sound = !state.sound;
   saveState();
   updateUI();
-});
-
-document.querySelectorAll('[data-preset]').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    if (isSpinning) return;
-    const key = btn.getAttribute('data-preset');
-    state.options = [...PRESETS[key]];
-    winnerCard.classList.add('hidden');
-    saveState();
-    updateUI();
-  });
 });
 
 clearAllBtn.addEventListener('click', () => {

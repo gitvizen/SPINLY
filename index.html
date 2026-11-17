@@ -17,11 +17,11 @@
       <div class="brand">
         <div class="brand-row">
           <h1>SPINLY</h1>
-          <span class="version-badge">v2.0</span>
+          <span class="version-badge">v2.1</span>
         </div>
         <div class="status-line">
-          <span id="statusDot" class="status-dot"></span>
-          <span id="statusText" class="mono-label">READY // 4 OPTIONS</span>
+          <span id="statusDot" class="status-dot standby"></span>
+          <span id="statusText" class="mono-label">STANDBY // ADD OPTIONS</span>
         </div>
       </div>
 
@@ -44,16 +44,16 @@
     <section class="panel wheel-panel">
       <div class="panel-top">
         <span class="mono-label">RANDOMIZER ENGINE</span>
-        <span id="oddsLabel" class="mono-label accent-text">25.0% / SLOT</span>
+        <span id="oddsLabel" class="mono-label accent-text">0.0% / SLOT</span>
       </div>
 
       <div class="wheel-wrapper">
         <div class="pointer" aria-hidden="true"></div>
         <canvas id="wheelCanvas" width="316" height="316"></canvas>
-        <button id="spinBtn" class="spin-center-btn" type="button">SPIN</button>
+        <button id="spinBtn" class="spin-center-btn" type="button" disabled>SPIN</button>
       </div>
 
-      <p id="hintText" class="hint">Tap wheel or press SPIN to execute</p>
+      <p id="hintText" class="hint">Add at least 2 options to enable wheel</p>
     </section>
 
     <!-- Result Readout Card -->
@@ -69,11 +69,14 @@
       </div>
     </section>
 
-    <!-- Options & Presets Panel -->
+    <!-- Options Pool Panel -->
     <section class="panel">
       <div class="panel-top">
         <span class="mono-label">POOL CONFIGURATION</span>
-        <span id="countBadge" class="mono-label">04 ITEMS</span>
+        <div class="panel-top-right">
+          <span id="countBadge" class="mono-label">00 ITEMS</span>
+          <button type="button" id="clearAllBtn" class="text-btn hidden">CLEAR</button>
+        </div>
       </div>
 
       <form id="addForm" class="add-form">
@@ -81,19 +84,12 @@
           id="optionInput"
           type="text"
           maxlength="24"
-          placeholder="Add name or option..."
+          placeholder="Enter name or option..."
           autocomplete="off"
           required
         />
         <button type="submit" class="btn btn-primary btn-add" aria-label="Hinzufügen">+</button>
       </form>
-
-      <div class="presets">
-        <button type="button" class="chip" data-preset="bill">WER ZAHLT</button>
-        <button type="button" class="chip" data-preset="food">ESSEN</button>
-        <button type="button" class="chip" data-preset="yesno">JA / NEIN</button>
-        <button type="button" id="clearAllBtn" class="chip chip-danger">CLEAR</button>
-      </div>
 
       <ul id="optionList" class="option-list"></ul>
     </section>

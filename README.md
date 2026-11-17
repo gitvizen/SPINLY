@@ -8,9 +8,9 @@
 
 * **Interaktives Canvas-Glücksrad:** High-DPI (`devicePixelRatio`) Rendering mit kalibriertem Außenring, dynamischer Segment-Berechnung und Quartic-Ease-Out-Animation via `requestAnimationFrame`.
 * **Hardware- & Browser-APIs:** Synthetische Klick-Sounds über die **Web Audio API** (ohne externe Audiodateien) sowie haptisches Feedback über die **Vibration API**.
-* **Lokale Zustandsverwaltung:** Persistiert Optionen, Audio-Einstellungen und die letzten Ziehungen direkt im `localStorage`.
+* **Lokale Zustandsverwaltung:** Persistiert eigene Optionen, Audio-Einstellungen und die letzten Ziehungen direkt im `localStorage`.
 * **Offline-First PWA:** Installierbar auf iOS und Android (`manifest.json`) inklusive Caching über einen eigenen **Service Worker** (`sw.js`).
-* **Presets & Ausscheidungs-Modus:** Schnellvorlagen (*Wer zahlt?*, *Essen*, *Ja/Nein*) und 1-Klick-Entfernen gezogener Personen für mehrstufige Runden.
+* **Ausscheidungs-Modus:** 1-Klick-Entfernen gezogener Personen oder Optionen für mehrstufige Runden.
 
 ---
 

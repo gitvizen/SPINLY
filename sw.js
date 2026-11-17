@@ -1,4 +1,4 @@
-const CACHE_NAME = 'spinly-v2';
+const CACHE_NAME = 'spinly-v3';
 const ASSETS = ['./', './index.html', './style.css', './app.js', './manifest.json'];
 
 self.addEventListener('install', (event) => {
